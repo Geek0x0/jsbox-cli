@@ -19,7 +19,7 @@ export function showHost () {
   console.log(`${chalk.greenBright(`Your Host IP:`)} ${ip}`)
 }
 
-export const sync = _.debounce(async (isdir, path, host, packageName) => {
+export const sync = _.debounce(async (isdir, path, host) => {
   log.info('File changed, uploading...')
   const formData = new FormData()
   if (isdir) {
@@ -68,7 +68,7 @@ export function watch (file: string) {
   }
   chokidar.watch(file, { ignoreInitial: true })
     .on('all', async () => {
-      await sync(isDir, file, host, packageName)
+      await sync(isDir, file, host)
     })
 }
 
