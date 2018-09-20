@@ -23,7 +23,8 @@ export const sync = _.debounce(async (isdir, path, host, packageName) => {
   log.info('File changed, uploading...')
   const formData = new FormData()
   if (isdir) {
-    path = await zipFolder(path, join(tmpdir(), `${packageName}.box`))
+    // path = await zipFolder(path, join(tmpdir(), `${packageName}.box`))
+    path = await zipFolder(path, join(tmpdir(), `dist.box`))
   }
   formData.append('files[]', fs.createReadStream(path))
 
@@ -99,7 +100,8 @@ export async function build (path: string, ouputPath?: string) {
   }
 
   ouputPath = !ouputPath
-    ? ouputPath = resolve(path, `.output/${packageName}.box`)
+    // ? ouputPath = resolve(path, `.output/${packageName}.box`)
+    ? ouputPath = resolve(path, `.output/dist.box`)
     : ouputPath = resolve(process.cwd(), ouputPath)
 
   await zipFolder(path, ouputPath)
