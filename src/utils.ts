@@ -15,7 +15,10 @@ export function isPackageDir (dir: string) {
 
 export function getPackageName (dir: string) {
   const config = JSON.parse(readFileSync(join(dir, 'config.json')).toString())
-  return _.get(config, 'info.name')
+  if (_.get(config, 'info.pkgName'))
+    return _.get(config, 'info.pkgName')
+  else
+    return _.get(config, 'info.name')
 }
 
 export function zipFolder (dir: string, path: string): Promise<string> {

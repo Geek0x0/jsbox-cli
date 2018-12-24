@@ -19,12 +19,11 @@ export function showHost () {
   console.log(`${chalk.greenBright(`Your Host IP:`)} ${ip}`)
 }
 
-export const sync = _.debounce(async (isdir, path, host) => {
+export const sync = _.debounce(async (isdir, path, host, packageName) => {
   log.info('File changed, uploading...')
   const formData = new FormData()
   if (isdir) {
-    // path = await zipFolder(path, join(tmpdir(), `${packageName}.box`))
-    path = await zipFolder(path, join(tmpdir(), `dist.box`))
+    path = await zipFolder(path, join(tmpdir(), `${packageName}.box`))
   }
   formData.append('files[]', fs.createReadStream(path))
 
@@ -68,7 +67,7 @@ export function watch (file: string) {
   }
   chokidar.watch(file, { ignoreInitial: true })
     .on('all', async () => {
-      await sync(isDir, file, host)
+      await sync(isDir, file, host, packageName)
     })
 }
 
@@ -100,8 +99,7 @@ export async function build (path: string, ouputPath?: string) {
   }
 
   ouputPath = !ouputPath
-    // ? ouputPath = resolve(path, `.output/${packageName}.box`)
-    ? ouputPath = resolve(path, `.output/dist.box`)
+    ? ouputPath = resolve(path, `.output/${packageName}.box`)
     : ouputPath = resolve(process.cwd(), ouputPath)
 
   await zipFolder(path, ouputPath)
